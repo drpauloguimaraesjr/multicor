@@ -44,15 +44,17 @@ export default function Hero() {
                     const moveX = (distanceX / distance) * -20 * power;
                     const moveY = (distanceY / distance) * -20 * power;
 
-                    // Candle light feel: Warm glow + dark shadow
-                    const shadowColor = `rgba(245, 158, 11, ${0.3 * power})`; // Warm orange glow
-                    const shadowReal = `rgba(0,0,0, ${0.5 * power})`; // Real depth shadow
+                    // Candle light feel: Warm golden glow + dark depth shadow
+                    const shadowColor = `rgba(255, 191, 0, ${0.4 * power})`; // Warm amber glow
+                    const shadowReal = `rgba(0,0,0, ${0.6 * power})`; // Real depth shadow
 
                     gsap.to(char, {
                         scale: scale,
                         x: distanceX * 0.1 * power, // Magnetic attraction
                         y: distanceY * 0.1 * power,
-                        textShadow: `${moveX}px ${moveY}px 15px ${shadowReal}, 0 0 10px ${shadowColor}`,
+                        rotateY: distanceX * 0.05 * power, // 3D Tilt
+                        rotateX: distanceY * -0.05 * power,
+                        textShadow: `${moveX}px ${moveY}px 20px ${shadowReal}, 0 0 15px ${shadowColor}`,
                         duration: 0.5,
                         ease: "power2.out"
                     });
@@ -61,7 +63,9 @@ export default function Hero() {
                         scale: 1,
                         x: 0,
                         y: 0,
-                        textShadow: "0px 0px 0px rgba(0,0,0,0)",
+                        rotateY: 0,
+                        rotateX: 0,
+                        textShadow: "0px 10px 30px rgba(0,0,0,0.5)",
                         duration: 0.8,
                         ease: "power2.out"
                     });
@@ -93,39 +97,49 @@ export default function Hero() {
                 style={{ y, opacity }}
                 className="relative z-10 h-full flex flex-col items-center justify-center px-4"
             >
-                <div className="text-center">
+                <div className="text-center relative [perspective:1000px]">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: "easeOut" }}
-                        className="mb-6 flex items-baseline justify-center gap-1"
+                        className="mb-8 flex items-center justify-center gap-3"
                     >
-                        <span className="text-secondary tracking-[0.3em] text-sm uppercase">Desde 1983</span>
-                        <div className="h-[1px] w-12 bg-white/20"></div>
-                        <span className="text-secondary tracking-[0.3em] text-sm uppercase">Brasil</span>
+                        <div className="h-[1px] w-8 bg-white/30"></div>
+                        <span className="text-secondary tracking-[0.4em] text-[10px] md:text-xs uppercase font-medium">Desde 1983 • Brasil</span>
+                        <div className="h-[1px] w-8 bg-white/30"></div>
                     </motion.div>
 
-                    <h1
-                        ref={titleRef}
-                        className="text-[18vw] md:text-[14vw] font-display font-light leading-[0.8] tracking-tighter text-white select-none whitespace-nowrap"
-                    >
-                        {brandName.split("").map((char, i) => (
-                            <span key={i} className="char inline-block will-change-transform">
-                                {char}
+                    <div className="relative inline-block">
+                        <h1
+                            ref={titleRef}
+                            className="text-[18vw] md:text-[14vw] font-display font-bold leading-[0.7] tracking-tighter text-white select-none whitespace-nowrap [text-shadow:0_10px_30px_rgba(0,0,0,0.5)]"
+                        >
+                            {brandName.split("").map((char, i) => (
+                                <span key={i} className="char inline-block will-change-transform [transform-style:preserve-3d]">
+                                    {char}
+                                </span>
+                            ))}
+                        </h1>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 0.6, x: 100 }}
+                            transition={{ delay: 0.5, duration: 2, ease: "easeOut" }}
+                            className="absolute -bottom-4 right-0 md:-right-20 flex items-center justify-center"
+                        >
+                            <span className="text-[3vw] md:text-[1.8vw] text-white font-display font-extralight uppercase tracking-[1.5em] whitespace-nowrap">
+                                DIGITAL
                             </span>
-                        ))}
-                        <span className="text-[4vw] md:text-[3vw] text-secondary font-display font-thin ml-4 align-top opacity-50">
-                            DIGITAL
-                        </span>
-                    </h1>
+                        </motion.div>
+                    </div>
 
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1, duration: 1.5 }}
-                        className="mt-12 text-lg md:text-xl text-secondary max-w-xl mx-auto font-light leading-relaxed"
+                        transition={{ delay: 1.2, duration: 1.5 }}
+                        className="mt-20 text-base md:text-lg text-secondary max-w-2xl mx-auto font-light leading-relaxed px-6"
                     >
-                        Estratégia visual e comunicação de alto impacto para marcas que definem o futuro.
+                        Estratégia visual e comunicação de alto impacto <br className="hidden md:block" /> para marcas que definem o futuro.
                     </motion.p>
                 </div>
 
