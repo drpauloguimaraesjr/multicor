@@ -40,7 +40,7 @@ export default function Portfolio() {
         if (!sliderRef.current || !sectionRef.current) return;
 
         const slider = sliderRef.current;
-        const speed = 1;
+        const speed = 0.05; // Much slower base speed for elegance
         let xPercent = 0;
         let direction = -1;
 
@@ -62,16 +62,15 @@ export default function Portfolio() {
             requestAnimationFrame(animation);
         };
 
-        // Velocity observer to speed up on scroll
+        // Velocity observer to speed up on scroll - more subtle now
         ScrollTrigger.create({
             trigger: document.body,
             start: "top top",
             end: "bottom bottom",
             onUpdate: (self) => {
-                // Adjust speed based on scroll velocity
                 const velocity = Math.abs(self.getVelocity());
-                const boost = velocity / 1000;
-                const finalSpeed = 0.5 + boost;
+                const boost = velocity / 2000; // Halved the boost impact
+                const finalSpeed = 0.2 + boost;
 
                 // If scrolling down, move left. If up, move right.
                 direction = self.direction === 1 ? -1 : 1;
