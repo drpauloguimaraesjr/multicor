@@ -35,6 +35,10 @@ export default function Hero() {
     const y2 = useTransform(scrollYProgress, [0.3, 1], ["100%", "0%"]);
     const opacity2 = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
 
+    // Logo Parallax (Reverse movement for depth)
+    const logoX = useTransform(mouseX, [-0.5, 0.5], ["5%", "-5%"]);
+    const logoY = useTransform(mouseY, [-0.5, 0.5], ["5%", "-5%"]);
+
     return (
         <div ref={containerRef} className="relative h-[200vh]">
             <div className="sticky top-0 h-screen flex flex-col justify-center px-4 md:px-12 bg-background overflow-hidden">
@@ -44,6 +48,29 @@ export default function Hero() {
                     style={{ y: y1, opacity: opacity1 }}
                     className="absolute inset-0 flex flex-col justify-center items-center z-10"
                 >
+                    {/* Watermark Logo - The Soul of the Brand */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9, rotate: -10 }}
+                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                        transition={{ duration: 2.5, ease: [0.22, 1, 0.36, 1] }} // Custom Bezier for premium feel
+                        className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden"
+                    >
+                        <motion.img
+                            src="/brand/logo-symbol.svg"
+                            alt="Multicor Symbol"
+                            style={{ x: logoX, y: logoY }}
+                            className="h-[120vh] w-auto opacity-[0.05] mix-blend-overlay blur-[2px]"
+                            animate={{
+                                scale: [1, 1.05, 1],
+                            }}
+                            transition={{
+                                duration: 15,
+                                repeat: Infinity,
+                                ease: "easeInOut"
+                            }}
+                        />
+                    </motion.div>
+
                     <motion.span
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -70,6 +97,14 @@ export default function Hero() {
                                 {char}
                             </motion.span>
                         ))}
+                        <motion.span
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 1.5, duration: 0.8 }}
+                            className="absolute -bottom-4 right-0 text-sm md:text-[0.14em] font-light tracking-[0.6em] text-accent uppercase"
+                        >
+                            Digital
+                        </motion.span>
                     </h1>
 
                     <motion.div

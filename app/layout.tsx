@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google"; // Podemos trocar Outfit por u
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import CustomCursor from "@/components/CustomCursor";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({
     subsets: ["latin"],
@@ -30,6 +31,7 @@ export default function RootLayout({
         <html lang="pt-BR" className={`${inter.variable} ${outfit.variable}`}>
             <body className={inter.className}>
                 <CustomCursor />
+                <Navbar />
                 <SmoothScroll>
                     {children}
                 </SmoothScroll>

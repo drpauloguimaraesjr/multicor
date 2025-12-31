@@ -6,7 +6,7 @@ export default function Footer() {
                     {/* Brand */}
                     <div>
                         <h3 className="text-3xl font-display font-bold gradient-text mb-4">
-                            Multicor
+                            Multicor <span className="text-secondary font-light text-sm ml-1">DIGITAL</span>
                         </h3>
                         <p className="text-slate-400 mb-4">
                             Comunicação Visual de Excelência
