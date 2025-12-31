@@ -7,6 +7,8 @@ import gsap from 'gsap';
 export default function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
+    const symbolRef = useRef<HTMLDivElement>(null);
+
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end start"]
@@ -14,6 +16,8 @@ export default function Hero() {
 
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+    const symbolScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+    const symbolRotate = useTransform(scrollYProgress, [0, 1], [0, 10]);
 
     useEffect(() => {
         const titleChars = titleRef.current?.querySelectorAll('.char');
@@ -31,28 +35,22 @@ export default function Hero() {
                 const distanceY = clientY - charY;
                 const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
 
-                // Max interaction distance
                 const maxDist = 300;
 
                 if (distance < maxDist) {
                     const power = (maxDist - distance) / maxDist;
-
-                    // Lupa / Magnify effect
                     const scale = 1 + (0.2 * power);
-
-                    // Shadow vector (Opposite to mouse)
                     const moveX = (distanceX / distance) * -20 * power;
                     const moveY = (distanceY / distance) * -20 * power;
 
-                    // Candle light feel: Warm golden glow + dark depth shadow
-                    const shadowColor = `rgba(255, 191, 0, ${0.4 * power})`; // Warm amber glow
-                    const shadowReal = `rgba(0,0,0, ${0.6 * power})`; // Real depth shadow
+                    const shadowColor = `rgba(255, 191, 0, ${0.4 * power})`;
+                    const shadowReal = `rgba(0,0,0, ${0.6 * power})`;
 
                     gsap.to(char, {
                         scale: scale,
-                        x: distanceX * 0.1 * power, // Magnetic attraction
+                        x: distanceX * 0.1 * power,
                         y: distanceY * 0.1 * power,
-                        rotateY: distanceX * 0.05 * power, // 3D Tilt
+                        rotateY: distanceX * 0.05 * power,
                         rotateX: distanceY * -0.05 * power,
                         textShadow: `${moveX}px ${moveY}px 20px ${shadowReal}, 0 0 15px ${shadowColor}`,
                         duration: 0.5,
@@ -73,6 +71,15 @@ export default function Hero() {
             });
         };
 
+        // Floating animation for background symbol
+        gsap.to(symbolRef.current, {
+            y: "+=30",
+            duration: 4,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+
         window.addEventListener('mousemove', handleMouseMove);
         return () => window.removeEventListener('mousemove', handleMouseMove);
     }, []);
@@ -81,17 +88,21 @@ export default function Hero() {
 
     return (
         <section ref={containerRef} className="relative h-screen bg-background overflow-hidden">
-            {/* Soul of the Brand Watermark */}
+            {/* Soul of the Brand Watermark with Parallax & Pulse */}
             <motion.div
-                style={{ opacity }}
-                className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-[0.03]"
+                ref={symbolRef}
+                style={{ opacity, scale: symbolScale, rotate: symbolRotate }}
+                className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none opacity-[0.04]"
             >
                 <img
                     src="/brand/logo-symbol.svg"
                     alt="Symbol"
-                    className="h-[120vh] w-auto mix-blend-overlay grayscale blur-[1px]"
+                    className="h-[110vh] w-auto mix-blend-overlay grayscale blur-[1px]"
                 />
             </motion.div>
+
+            {/* Subtle Gradient Overlay for Text Visibility */}
+            <div className="absolute inset-0 z-5 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.4)_0%,transparent_70%)] pointer-events-none" />
 
             <motion.div
                 style={{ y, opacity }}
@@ -102,17 +113,17 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 1, ease: "easeOut" }}
-                        className="mb-8 flex items-center justify-center gap-3"
+                        className="mb-12 flex items-center justify-center gap-3"
                     >
                         <div className="h-[1px] w-8 bg-white/30"></div>
                         <span className="text-secondary tracking-[0.4em] text-[10px] md:text-xs uppercase font-medium">Desde 1983 • Brasil</span>
                         <div className="h-[1px] w-8 bg-white/30"></div>
                     </motion.div>
 
-                    <div className="relative inline-block">
+                    <div className="relative inline-block mb-12">
                         <h1
                             ref={titleRef}
-                            className="text-[18vw] md:text-[14vw] font-display font-bold leading-[0.7] tracking-tighter text-white select-none whitespace-nowrap [text-shadow:0_10px_30px_rgba(0,0,0,0.5)]"
+                            className="text-[18vw] md:text-[14vw] font-display font-bold leading-[0.75] tracking-tighter text-white select-none whitespace-nowrap [text-shadow:0_15px_40px_rgba(0,0,0,0.6)]"
                         >
                             {brandName.split("").map((char, i) => (
                                 <span key={i} className="char inline-block will-change-transform [transform-style:preserve-3d]">
@@ -123,11 +134,11 @@ export default function Hero() {
 
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 0.6, x: 100 }}
-                            transition={{ delay: 0.5, duration: 2, ease: "easeOut" }}
-                            className="absolute -bottom-4 right-0 md:-right-20 flex items-center justify-center"
+                            animate={{ opacity: 0.5, x: 60 }}
+                            transition={{ delay: 0.8, duration: 2, ease: "easeOut" }}
+                            className="absolute -bottom-8 md:-bottom-12 right-0 md:right-[-10vw] flex items-center justify-center"
                         >
-                            <span className="text-[3vw] md:text-[1.8vw] text-white font-display font-extralight uppercase tracking-[1.5em] whitespace-nowrap">
+                            <span className="text-[3vw] md:text-[1.8vw] text-white font-display font-extralight uppercase tracking-[1.5em] whitespace-nowrap drop-shadow-lg">
                                 DIGITAL
                             </span>
                         </motion.div>
@@ -136,8 +147,8 @@ export default function Hero() {
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ delay: 1.2, duration: 1.5 }}
-                        className="mt-20 text-base md:text-lg text-secondary max-w-2xl mx-auto font-light leading-relaxed px-6"
+                        transition={{ delay: 1.5, duration: 1.5 }}
+                        className="mt-24 text-lg md:text-xl text-white/90 max-w-2xl mx-auto font-light leading-relaxed px-6 drop-shadow-md"
                     >
                         Estratégia visual e comunicação de alto impacto <br className="hidden md:block" /> para marcas que definem o futuro.
                     </motion.p>
@@ -145,13 +156,19 @@ export default function Hero() {
 
                 {/* Scroll Indicator */}
                 <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 2, duration: 1 }}
-                    className="absolute bottom-12 flex flex-col items-center gap-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 2.2, duration: 1.2 }}
+                    className="absolute bottom-12 flex flex-col items-center gap-4 group cursor-pointer"
                 >
-                    <span className="text-[10px] uppercase tracking-[0.5em] text-secondary">Role para baixo</span>
-                    <div className="h-20 w-[1px] bg-gradient-to-b from-white/40 to-transparent"></div>
+                    <span className="text-[11px] uppercase tracking-[0.6em] text-white/60 group-hover:text-white transition-colors duration-500">Role para baixo</span>
+                    <div className="h-24 w-[1px] bg-gradient-to-b from-white/60 via-white/20 to-transparent overflow-hidden">
+                        <motion.div
+                            animate={{ y: [0, 96, 0] }}
+                            transition={{ duration: 2, repeat: -1, ease: "easeInOut" }}
+                            className="w-full h-1/2 bg-white"
+                        />
+                    </div>
                 </motion.div>
             </motion.div>
         </section>
