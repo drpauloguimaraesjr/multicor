@@ -18,6 +18,7 @@ export default function ScrollReveal({ children, className = '', delay = 0 }: Sc
                     if (entry.isIntersecting) {
                         setTimeout(() => {
                             entry.target.classList.add('active');
+                            observer.unobserve(entry.target);
                         }, delay);
                     }
                 });
