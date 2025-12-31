@@ -25,6 +25,9 @@ const projects = [
     { id: 10, title: 'Imperador Logística', category: 'Frotas', image: '/images/imperador-bau-lateral-2.jpg' },
     { id: 11, title: 'Multicor Print', category: 'Impressão', image: '/images/service-print.jpg' },
     { id: 12, title: 'Gestão de Frotas', category: 'Frotas', image: '/images/service-fleet.jpg' },
+    { id: 13, title: 'Fachada Catavento', category: 'Fachadas', image: '/images/facade-catavento.jpg' },
+    { id: 14, title: 'HDM Hospitalar', category: 'Sinalização', image: '/images/facade-hdm.jpg' },
+    { id: 15, title: 'Pista de Dança', category: 'Impressão', image: '/images/event-dance-floor.jpg' },
 ];
 
 export default function Portfolio() {
