@@ -1,0 +1,78 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-outfit: 'Outfit', system-ui, -apple-system, sans-serif;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  font-family: var(--font-inter);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom Selection Color */
+::selection {
+  background-color: #ffffff;
+  color: #0a0a0a;
+}
+
+/* Typography Utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Button & Interactive Styles inspired by reference */
+.btn-magnetic {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.link-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 1px;
+  bottom: 0;
+  left: 0;
+  background-color: currentColor;
+  transform-origin: bottom right;
+  transition: transform 0.5s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

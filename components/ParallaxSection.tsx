@@ -1,0 +1,44 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+interface ParallaxSectionProps {
+    children: React.ReactNode;
+    speed?: number;
+    className?: string;
+}
+
+export default function ParallaxSection({ children, speed = 0.5, className = '' }: ParallaxSectionProps) {
+    const sectionRef = useRef<HTMLDivElement>(null);
+    const [offset, setOffset] = useState(0);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (sectionRef.current) {
+                const rect = sectionRef.current.getBoundingClientRect();
+                const scrolled = window.scrollY;
+                const elementTop = rect.top + scrolled;
+                const elementHeight = rect.height;
+
+                // Calculate parallax offset
+                if (scrolled > elementTop - window.innerHeight && scrolled < elementTop + elementHeight) {
+                    const offset = (scrolled - (elementTop - window.innerHeight)) * speed;
+                    setOffset(offset);
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial call
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [speed]);
+
+    return (
+        <div ref={sectionRef} className={`parallax-container ${className}`}>
+            <div style={{ transform: `translateY(${offset}px)` }}>
+                {children}
+            </div>
+        </div>
+    );
+}
